@@ -30,6 +30,7 @@ def gradient_ascent(x, y, alpha, max):
     weigh = np.ones((n, 1))
     for i in range(max):
         h = sigmoid(x * weigh)
+        # 核心梯度上升算法
         weigh = weigh + alpha * x.transpose() * (y - h)
     return weigh
 

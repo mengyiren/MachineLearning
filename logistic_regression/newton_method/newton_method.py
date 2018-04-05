@@ -37,7 +37,7 @@ def newton_method(x, y, max):
         H = x.T * diagflat(h) * diagflat(1 - h) * x
         # 迭代求出theta
         weigh = weigh - la.inv(H) * grad
-        max -= max
+        max -= 1
     return weigh
 
 
@@ -45,7 +45,7 @@ def prediction(x):
     x = mat(x)
     x_train = load_data('train/logistic_x.txt', 2)
     y_train = load_data('train/logistic_y.txt', 1)
-    theta = newton_method(x_train, y_train, 5)
+    theta = newton_method(x_train, y_train, 3)
     return sigmoid(x * theta)
 
 

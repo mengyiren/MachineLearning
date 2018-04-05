@@ -21,7 +21,7 @@ def load_data(file_name, n):
 
 
 def sigmoid(x):
-    return 2.0 / (1 + exp(-2 * x)) - 1
+    return 2.0 / (1 + exp(-x)) - 1
 
 
 def newton_method(x, y, max):
@@ -34,9 +34,9 @@ def newton_method(x, y, max):
         # 计算假设函数，得到一个列向量，每行为那个样本属于1的概率
         h = sigmoid(diagflat(y) * x * weigh)
         # 计算J对theta的一阶导数
-        grad = 2 * x.transpose() * diagflat(y) * (1 - h)
+        grad = x.transpose() * diagflat(y) * (1 - h)
         # 计算海森矩阵即J对theta的二阶导数
-        H = 4 * x.T * diagflat(y) * diagflat(y) * diagflat(h) * diagflat(1 - h) * x
+        H = x.T * diagflat(y) * diagflat(y) * diagflat(h) * diagflat(1 - h) * x
         # 迭代求出theta
         weigh = weigh - la.inv(H) * grad
         max -= 1
@@ -47,9 +47,9 @@ def prediction(x):
     x = mat(x)
     x_train = load_data('train/logistic_x.txt', 2)
     y_train = load_data('train/logistic_y.txt', 1)
-    theta = newton_method(x_train, y_train, 10)
+    theta = newton_method(x_train, y_train, 30)
     return sigmoid(x * theta)
 
 
 if __name__ == '__main__':
-    print(prediction([6.5000000e+00,-2.9122807e+00]))
+    print(prediction([6.5000000e+00, -2.9122807e+00]))

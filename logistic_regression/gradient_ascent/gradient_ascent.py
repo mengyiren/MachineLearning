@@ -40,8 +40,8 @@ def prediction(x):
     x_train = load_data('train/logistic_x.txt', 2)
     y_train = load_data('train/logistic_y.txt', 1)
     result = gradient_ascent(x_train, y_train, 0.8, 100)
-    return sigmoid(x * result)
+    return 2 * sigmoid(x * result) - 1
 
 
 if __name__ == '__main__':
-    print(prediction([1.3432504e+00,-1.3311479e+00]))
+    print(prediction([1.3432504e+00, -1.3311479e+00]))

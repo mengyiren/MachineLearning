@@ -6,6 +6,8 @@
 
 from numpy import *
 from numpy import linalg as la
+import matplotlib.pyplot as plt
+import time
 
 
 def load_data(file_name, n):
@@ -37,6 +39,14 @@ def newton_method(x, y, max):
         H = x.T * diagflat(h) * diagflat(1 - h) * x
         # 迭代求出theta
         weigh = weigh - la.inv(H) * grad
+        plt.figure(1)
+        plt.subplot(211)
+        plt.plot(sort(x * weigh).tolist(), y.tolist(), 'b', label='real')
+
+        plt.subplot(212)
+        plt.plot(sort(x * weigh).tolist(), (2 * sigmoid(x * weigh) - 1).tolist(), 'r--', label='prediction')
+        plt.show()
+        time.sleep(5)
         max -= 1
     return weigh
 
@@ -45,8 +55,8 @@ def prediction(x):
     x = mat(x)
     x_train = load_data('train/logistic_x.txt', 2)
     y_train = load_data('train/logistic_y.txt', 1)
-    theta = newton_method(x_train, y_train, 3)
-    return sigmoid(x * theta)
+    theta = newton_method(x_train, y_train, 4)
+    return 2 * sigmoid(x * theta) - 1
 
 
 if __name__ == '__main__':

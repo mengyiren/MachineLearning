@@ -3,6 +3,8 @@
     使用牛顿算法计算回归系数
     当y值为-1,1时的牛顿方法
     对于y值为-1,1的逻辑回归，cost function 变为 J = -ln(1+exp(-2yx))
+
+    这个算法还有问题，还需要继续研究
 """
 
 from numpy import *
@@ -21,7 +23,7 @@ def load_data(file_name, n):
 
 
 def sigmoid(x):
-    return 2.0 / (1 + exp(-x)) - 1
+    return 1.0 / (1 + exp(-x))
 
 
 def newton_method(x, y, max):
@@ -29,14 +31,14 @@ def newton_method(x, y, max):
     y = mat(y)
     m, n = shape(x)
     # 牛顿方法中theta的取值不会影响y的值
-    weigh = ones((n, 1))
+    weigh = zeros((n, 1))
     while max > 0:
         # 计算假设函数，得到一个列向量，每行为那个样本属于1的概率
-        h = sigmoid(diagflat(y) * x * weigh)
+        h = sigmoid(2 * diagflat(y) * x * weigh)
         # 计算J对theta的一阶导数
-        grad = x.transpose() * diagflat(y) * (1 - h)
+        grad = 2 * x.transpose() * diagflat(y) * h
         # 计算海森矩阵即J对theta的二阶导数
-        H = x.T * diagflat(y) * diagflat(y) * diagflat(h) * diagflat(1 - h) * x
+        H = 4 * x.T * diagflat(y) * diagflat(y) * diagflat(h) * diagflat(1 - h) * x
         # 迭代求出theta
         weigh = weigh - la.inv(H) * grad
         max -= 1
@@ -48,7 +50,7 @@ def prediction(x):
     x_train = load_data('train/logistic_x.txt', 2)
     y_train = load_data('train/logistic_y.txt', 1)
     theta = newton_method(x_train, y_train, 30)
-    return sigmoid(x * theta)
+    return 2 * sigmoid(x * theta) - 1
 
 
 if __name__ == '__main__':

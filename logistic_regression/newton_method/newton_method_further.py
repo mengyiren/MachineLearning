@@ -51,10 +51,11 @@ def prediction(x):
     x_train = load_data('train/logistic_x.txt', 2)
     y_train = load_data('train/logistic_y.txt', 1)
     theta = newton_method(x_train, y_train)
-    if 2 * sigmoid(x * theta) - 1 > 0.5:
+    # 输出y的预测值，也可以输出y的概率值
+    if sigmoid(x * theta) > 0.5:
         return 1
-    return 0
+    return -1
 
 
 if __name__ == '__main__':
-    print(prediction([2.0847953e+00, 1.3567251e+00]))
+    print(prediction([8.6864964e-01,-2.4119348e+00]))

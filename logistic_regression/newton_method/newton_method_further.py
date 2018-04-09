@@ -26,22 +26,23 @@ def sigmoid(x):
     return 1.0 / (1 + exp(-x))
 
 
-def newton_method(x, y, max):
+def newton_method(x, y):
     x = mat(x)
     y = mat(y)
     m, n = shape(x)
     # 牛顿方法中theta的取值不会影响y的值
     weigh = zeros((n, 1))
-    while max > 0:
+    grad = ones((n, 1))
+    # 当梯度精度小于exp(-6)说明theta已经收敛
+    while la.norm(grad) > exp(-6):
         # 计算假设函数，得到一个列向量，每行为那个样本属于1的概率
-        h = sigmoid(diagflat(y) * x * weigh)
+        h = sigmoid(-diagflat(y) * x * weigh)
         # 计算J对theta的一阶导数
-        grad = x.transpose() * diagflat(y) * (h - 1)
+        grad = -x.transpose() * diagflat(y) * h
         # 计算海森矩阵即J对theta的二阶导数
         H = x.T * diagflat(y) * diagflat(y) * diagflat(h) * diagflat(1 - h) * x
         # 迭代求出theta
         weigh = weigh - la.inv(H) * grad
-        max -= 1
     return weigh
 
 
@@ -49,7 +50,7 @@ def prediction(x):
     x = mat(x)
     x_train = load_data('train/logistic_x.txt', 2)
     y_train = load_data('train/logistic_y.txt', 1)
-    theta = newton_method(x_train, y_train, 3)
+    theta = newton_method(x_train, y_train)
     return 2 * sigmoid(x * theta) - 1
 
 

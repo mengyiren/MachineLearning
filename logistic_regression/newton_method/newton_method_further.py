@@ -2,9 +2,7 @@
 程序说明：
     使用牛顿算法计算回归系数
     当y值为-1,1时的牛顿方法
-    对于y值为-1,1的逻辑回归，cost function 变为 J = -ln(1+exp(-2yx))
-
-    这个算法还有问题，还需要继续研究
+    对于y值为-1,1的逻辑回归，cost function 变为 J = log(1+exp(-yx))
 """
 
 from numpy import *

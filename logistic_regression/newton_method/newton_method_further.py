@@ -31,8 +31,8 @@ def newton_method(x, y):
     # 牛顿方法中theta的取值不会影响y的值
     weigh = zeros((n, 1))
     grad = ones((n, 1))
-    # 当梯度精度小于exp(-6)说明theta已经收敛
-    while la.norm(grad) > exp(-6):
+    # 当梯度精度小于10E-6说明theta已经收敛
+    while la.norm(grad) > 10E-6:
         # 计算假设函数，得到一个列向量，每行为那个样本属于1的概率
         h = sigmoid(-diagflat(y) * x * weigh)
         # 计算J对theta的一阶导数

@@ -14,14 +14,16 @@ def predict(x_input, y_input, x, tau, alpha):
     # 梯度的2范数精度大于10的-6次方停止
     while la.norm(grad) > 10E-6:
         h = x_t * theta
-        grad = w * x_t.transpose() * (h - y_t)
+        grad = w.transpose() * diagflat((h-y_t).transpose()) * x_t
         theta = theta - alpha * grad
-    return theta.transpose() * target
+    return target * theta
 
 
 def get_weight(x, m, target, tau):
-    diff = x - matlib.repmat(target, m, 1)
-    return exp(diff.transpose() * diff / (-2 * tau ** 2))
+    a = matlib.repmat(target, m, 1)
+    diff = x - a
+    b = multiply(diff,diff)
+    return exp(b / (-2 * tau ** 2))
 
 
 def load_data(file_name, row_start, row_end, start, end):

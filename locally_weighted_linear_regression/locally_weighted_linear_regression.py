@@ -2,28 +2,24 @@ from numpy import *
 import numpy.linalg as la
 import numpy.matlib as matlib
 
+'''
+    局部加权回归theta = (x.T*w*x)^-1*x.T*w*y 只是一个示意，并不是矩阵的运算
+'''
 
-def predict(x_input, y_input, x, tau, alpha):
+def predict(x_input, y_input, x, tau):
     x_t = mat(x_input)
     y_t = mat(y_input)
     target = mat(x)
     m, n = x_t.shape
     w = get_weight(x_t, m, target, tau)
-    grad = ones((n, 1))
-    theta = ones((n, 1))
-    # 梯度的2范数精度大于10的-6次方停止
-    while la.norm(grad) > 10E-6:
-        h = x_t * theta
-        grad = w.transpose() * diagflat((h-y_t).transpose()) * x_t
-        theta = theta - alpha * grad
+    theta = la.inv(x_t.transpose()*diagflat(w)*x_t)*x_t.transpose()*diagflat(w)*y_t
     return target * theta
 
 
 def get_weight(x, m, target, tau):
-    a = matlib.repmat(target, m, 1)
-    diff = x - a
-    b = multiply(diff,diff)
-    return exp(b / (-2 * tau ** 2))
+    diff = x - matlib.repmat(target, m, 1)
+    # 将每一行的权重系数相加，求出训练数据的权重系数
+    return exp(sum(multiply(diff, diff), 1) / (-2 * tau ** 2))
 
 
 def load_data(file_name, row_start, row_end, start, end):
@@ -47,5 +43,5 @@ if __name__ == '__main__':
     y_train = load_data('train/quasar_train.txt', 0, 1500, 8, 8)
     x_test = load_data('train/quasar_train.txt', 1501, 1815, 0, 7)
     y_test = load_data('train/quasar_train.txt', 1501, 1815, 8, 8)
-    print('预测值：' + str(predict(x_train, y_train, x_test[0], 5, 0.8)))
-    predict('实际值：' + str(y_test[0]))
+    print('预测值：' + str(predict(x_train, y_train, x_test[6], 3)))
+    print('实际值：' + str(y_test[6]))

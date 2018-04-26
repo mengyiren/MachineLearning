@@ -6,13 +6,14 @@ import numpy.matlib as matlib
     局部加权回归theta = (x.T*w*x)^-1*x.T*w*y 只是一个示意，并不是矩阵的运算
 '''
 
+
 def predict(x_input, y_input, x, tau):
     x_t = mat(x_input)
     y_t = mat(y_input)
     target = mat(x)
     m, n = x_t.shape
     w = get_weight(x_t, m, target, tau)
-    theta = la.inv(x_t.transpose()*diagflat(w)*x_t)*x_t.transpose()*diagflat(w)*y_t
+    theta = la.inv(x_t.transpose() * diagflat(w) * x_t) * x_t.transpose() * diagflat(w) * y_t
     return target * theta
 
 

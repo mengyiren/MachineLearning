@@ -34,9 +34,9 @@ def newton_method(x, y, max):
         # 计算假设函数，得到一个列向量，每行为那个样本属于1的概率
         h = sigmoid(x * weigh)
         # 计算J对theta的一阶导数
-        grad = x.transpose() * (h - y)
+        grad = x.transpose() * (y - h)
         # 计算海森矩阵即J对theta的二阶导数
-        H = x.T * diagflat(h) * diagflat(1 - h) * x
+        H = x.T * diagflat(h) * diagflat(h - 1) * x
         # 迭代求出theta
         weigh = weigh - la.inv(H) * grad
         plt.figure(1)
